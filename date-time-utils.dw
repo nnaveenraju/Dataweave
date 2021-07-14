@@ -1,0 +1,23 @@
+%dw 2.0
+
+import * from dw::util::Timer
+
+fun sanitize(stringInput) =       
+	if((not isEmpty(stringInput)))
+      stringInput
+    else 
+		null
+		
+fun timeDifference(startTime)=
+	calculateTimeDifference(startTime).minutes ++ 
+	":" ++ formatSeconds(calculateTimeDifference(startTime).secs) ++ 
+	":" ++ ((currentMilliseconds() - startTime.milliseconds) as String)[-4 to -1]
+
+fun calculateTimeDifference(startTime)=
+	(now() - startTime) as Period
+
+fun formatSeconds(secs)=
+	if(secs >= 0 and secs < 10)
+	    "0" ++ secs
+	else 
+	    secs
