@@ -1,0 +1,27 @@
+%dw 2.0
+output application/json
+
+fun guard (fn, errorMessage) = dw::Runtime::try(fn) match {
+  case tr if (tr.success) -> tr.result
+  else -> errorMessage // error message to be shown on success: "false"
+}
+
+var array = [ 
+  { name: "Tom",
+    date:   "21-01-2021"
+  },
+  { name: "Pete",
+    date:   "19-04-2021"
+  },
+  { name: "John",
+    date:   "06-15-2021"
+  }
+]
+
+---
+
+array map ((item, index) -> {
+    name: item.name,
+    date: guard( 
+    ( () -> item.date as Date { format: "dd-MM-yyyy" } ), "$(item.date) is incorrect date") 
+} )
