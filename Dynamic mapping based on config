@@ -1,0 +1,29 @@
+%dw 2.0
+output application/json
+var applyMapping = (in, mappingsDef) -> (
+   mappingsDef map (def) -> {
+    (def.target) : in[def.source] default def."default"
+  }
+)
+
+var mappings = [
+  {
+    "source": "sfdc_name",
+    "target": "name2",
+    "default": "---"
+  },
+  {
+    "source": "sfdc_last_name",
+    "target": "lastName",
+    "default": "---"
+  },
+  {
+    "source": "sfdc_employee",
+    "target": "user",
+    "default": true
+  }
+]
+---
+payload.sfdc_users.*sfdc_user map (user) -> (
+        applyMapping(user, mappings)
+)
