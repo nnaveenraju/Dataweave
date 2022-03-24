@@ -1,0 +1,10 @@
+%dw 1.0
+%output application/java
+---
+// (payload map read($.originalPayload, "application/json") ) map ($ ++ read(payload[$$].resultPayload, "application/json") )
+
+(payload map read($.originalPayload, "application/json") ) map ((out, index) -> {
+	merge: 	out map ((inn, inIndex) -> {
+		final: inn ++ 	read(payload[index].resultPayload, "application/json")[inIndex]
+	}.final)
+}.merge)
